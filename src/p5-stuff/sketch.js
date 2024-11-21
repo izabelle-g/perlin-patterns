@@ -69,20 +69,20 @@ function setup() {
 function getColour(noiseVal) {
   var grd = parseInt(palette.selected());
   
-  if(noiseVal <= 0.25) {
-    let n = map(noiseVal, 0, 0.25, 0, 1);
+  if(noiseVal <= 0.375) {
+    let n = map(noiseVal, 0, 0.375, 0, 1);
     colour = lerpColor(grdMap[grd][0], grdMap[grd][1], n);
   }
-  else if(noiseVal > 0.25 && noiseVal <= 0.50) {
-    let n = map(noiseVal, 0.25, 0.50, 0, 1);
+  else if(noiseVal > 0.375 && noiseVal <= 0.50) {
+    let n = map(noiseVal, 0.375, 0.50, 0, 1);
     colour = lerpColor(grdMap[grd][1], grdMap[grd][2], n);
   }
-  else if(noiseVal >= 0.75) {
-    let n = map(noiseVal, 0.75, 1, 0, 1);
+  else if(noiseVal >= 0.625) {
+    let n = map(noiseVal, 0.625, 1, 0, 1);
     colour = lerpColor(grdMap[grd][3], grdMap[grd][4], n); 
   }
   else {
-    let n = map(noiseVal, 0.50, 0.75, 0, 1);
+    let n = map(noiseVal, 0.50, 0.625, 0, 1);
     colour = lerpColor(grdMap[grd][2], grdMap[grd][3], n);
   }
   
