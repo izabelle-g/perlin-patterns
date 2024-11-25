@@ -90,7 +90,7 @@ function getColour(noiseVal) {
 }
 
 function onScreen(p) {
-  return p.x >= 0 && p.x <= (width / 2) && p.y >= 0 && p.y <=                height;
+  return p.x >= 0 && p.x <= (width / 2) && p.y >= 0 && p.y <= height;
 }
 
 function updateFlowfield() {
