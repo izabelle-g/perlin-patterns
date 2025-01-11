@@ -31,7 +31,9 @@ function draw() {
     case 'Goof':
       goof();
       break;
-    default: test();
+    default:
+      followField();
+      showParticles();
       break;
   }
 }
