@@ -1,8 +1,6 @@
 function setup() {
-  createCanvas(320, 320);
-  createPalettes();
-  createParticles();
-  setupFlowfield();
+  createCanvas(480, 480);
+  initSketch();
   initInterface();
 }
 
@@ -21,8 +19,19 @@ function draw() {
     case 'Circles':
       circles();
       break;
-    default: 
-      gridBased(pattern.selected());
+    case 'Retro':
+      retro();
+      break;
+    case 'Checkers':
+      checkers();
+      break;
+    case 'Triangles':
+      triangles();
+      break;
+    case 'Goof':
+      goof();
+      break;
+    default: test();
       break;
   }
 }

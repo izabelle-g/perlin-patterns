@@ -1,27 +1,45 @@
 var pattern = 'Test';
+var emotion = 'test';
 
 /***********  ***********/
 function initInterface() {
   let button = createButton("SAVE");
-  button.position(320, 20);
+  button.position(width, 40);
   button.mousePressed(saveImage);
   
+  let pause = createButton("PAUSE");
+  pause.position(width, 62);
+  pause.mousePressed(toggleLoop);
+  
   pattern = createSelect();
-  pattern.position(320, 0);
+  pattern.position(width, 20);
   
   pattern.option('Flow');
   pattern.option('Retro');
   pattern.option('Checkers');
   pattern.option('Scales');
   pattern.option('Circles');
+  pattern.option('Triangles');
+  pattern.option('Goof');
   pattern.option('Test');
+  pattern.selected('Test');
   pattern.changed(initSketch);
-}
-
-function saveButton() {
-  let button = createButton("SAVE");
-  button.position(320, 0);
-  button.mousePressed(saveImage);
+  
+  let semantics = createSelect();
+  semantics.position(width, 0);
+  
+  semantics.option('happy');
+  semantics.option('anger');
+  semantics.option('sad');
+  semantics.option('fear');
+  semantics.option('disgust');
+  semantics.option('surprise');
+  semantics.option('test');
+  semantics.selected('test');
+  semantics.changed( () => {
+    emotion = semantics.value();
+    initSketch();
+  });
 }
 
 /*********** media ***********/

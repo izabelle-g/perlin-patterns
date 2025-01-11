@@ -2,11 +2,10 @@ let particles = [];
 let flowfield = [];
 let palettes = [];
 
-const grid = 8;
-let num = 500;
+const grid = 16;
+let num = 1500;
 let zoff = 0;
 let zInc = 0.00009;
-let emotion = "test";
 var isLoop = true;
 
 let cols, rows;
@@ -134,27 +133,29 @@ function initSketch() {
 
 
 /*********** pattern functions ***********/
-function gridBased(pattern) {
+function checkers() {
+  zInc = 0.0009;
   for(let y = 0; y < rows; y++) {
     for(let x = 0; x < cols; x++) {
       let n = noise(x, y, zoff);
-      
-      switch(pattern){
-        case 'Checkers':
-          rect(x * grid, y * grid, grid, grid);
-          fill(getColour(n));
-          break;
-        case 'Retro':
-          stroke(getColour(n));
-          strokeWeight(1);
-          circle(x * grid, y * grid, n * TWO_PI);
-          break;
-        default:
-          break;
+      rect(x * grid, y * grid, grid, grid);
+      fill(getColour(n));
       }
-    }
-    zoff += 0.0009;
   }
+  zoff += zInc;
+}
+
+function retro() {
+  zInc = 0.0009;
+  for(let y = 0; y < rows; y++) {
+    for(let x = 0; x < cols; x++) {
+      let n = noise(x, y, zoff);    
+      stroke(getColour(n));
+      strokeWeight(1);
+      circle(x * grid, y * grid, n * TWO_PI);
+    }
+  }
+  zoff += zInc;
 }
 
 function scales() {
@@ -190,42 +191,98 @@ function circles() {
   }
 }
 
+function triangles() {
+  zInc = 0.0005;
+  for(let y = 0; y < rows; y++) {
+    for(let x = 0; x < cols; x++) {
+      let n = noise(x, y, zoff);
+      let ax = x * grid;
+      let ay = y * grid;
+      let bx = (x * grid) + grid;
+      let by = (y * grid) + grid;
+
+      strokeWeight(0);
+      fill(getColour(n));
+      switch(floor(map(n, 0, 1, 0, 4))) {
+        case 0:
+          // NW
+          triangle(ax, by, ax, ay, bx, ay);
+          break;
+        case 1:
+          // NE
+          triangle(ax, ay, bx, ay, bx, by);
+          break;
+        case 2:
+          // SW
+          triangle(ax, ay, ax, by, bx, by);
+          break;
+        default:
+          // SE
+          triangle(ax, by, bx, by, bx, ay);
+          break;
+      }
+    }
+  }
+  zoff += zInc;
+}
+
+function goof() {
+  // comment this line to un-goof
+  background(255);
+  for(let f of flowfield) {
+    if(f != undefined) {
+      let n = noise(f[1], f[2], zoff);
+      push();
+      translate(f[1] * grid, f[2] * grid);
+      rotate(f[0].heading());
+      strokeWeight(0);
+      fill(getColour(n));
+      rect(f[1] * grid, f[2] * grid, grid, grid);
+      pop();
+    }
+  }
+}
+
+function test() {
+  
+}
+
 /*********** colour functions ***********/
 /*
  * Creates the palettes associated with each emotion
  */
 function createPalettes() {
   palettes = {
-    happy:    [ color("#372134"),
-                color("#372134"),
-                color("#372134"),
-                color("#372134"),
-                color("#372134") ],
-    sad:      [ color("#372134"),
-                color("#372134"),
-                color("#372134"),
-                color("#372134"),
-                color("#372134") ],
-    fear:     [ color("#372134"),
-                color("#372134"),
-                color("#372134"),
-                color("#372134"),
-                color("#372134") ],
-    disgust:  [ color("#372134"),
-                color("#372134"),
-                color("#372134"),
-                color("#372134"),
-                color("#372134") ],
-    surprise: [ color("#372134"),
-                color("#372134"),
-                color("#372134"),
-                color("#372134"),
-                color("#372134") ],
-    anger:    [ color("#372134"),
-                color("#372134"),
-                color("#372134"),
-                color("#372134"),
-                color("#372134") ],
+    happy:    [ color("#C99AC5"),
+                color("#D52379"),
+                color("#78B1D2"),
+                color("#FECA77"),
+                color("#CAC257") ],
+    sad:      [ color("#4655A6"),
+                color("#10496A"),
+                color("#9BB0DB"),
+                color("#1862AF"),
+                color("#3649A1") ],
+    fear:     [ color("#AA503C"),
+                color("#D93126"),
+                color("#F68C74"),
+                color("#22406F"),
+                color("#716879") ],
+    disgust:  [ color("#467048"),
+                color("#817C34"),
+                color("#7B471D"),
+                color("#B7D431"),
+                color("#461310") ],
+    surprise: [ color("#7459A6"),
+                color("#476CB3"),
+                color("#F69BAE"),
+                color("#F37E38"),
+                color("#EA2A57") ],
+    anger:    [ color("#80311A"),
+                color("#EE3524"),
+                color("#F36C22"),
+                color("#AA1E24"),
+                color("#000000") ],
     test:     [ color("#ffd670"),
                 color("#ff70a6"),
                 color("#e9ff70"),
@@ -233,6 +290,16 @@ function createPalettes() {
                 color("#ff9770") ]
   };
 }
+
+const emotionColours = {
+  happy: [color("#FFD3ACA")],
+  sad: [],
+  anger: [],
+  neutral: [],
+  disgust: [],
+  fear: [],
+  surprise: []
+};
 
 /*
  * Returns the colour based on the emotion analysis and the noise
